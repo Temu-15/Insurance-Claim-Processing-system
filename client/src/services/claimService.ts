@@ -42,3 +42,8 @@ export const rejectClaim = async (claimId: number) => {
 export const deleteClaim = async (claimId: number) => {
   return axios.delete(`${API_BASE_URL}/api/claims/${claimId}`);
 };
+
+export const getMyClaims = async () => {
+  const response = await axios.get(`${API_BASE_URL}/api/claims/my`);
+  return response;
+};

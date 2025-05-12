@@ -7,7 +7,8 @@ export class CreatePolicyDto {
     public status?: ApplicationStatus,
     public policyNumber?: string,
     public startDate?: Date,
-    public endDate?: Date
+    public endDate?: Date,
+    public userId?: number
   ) {
     (this.productId = productId),
       (this.policyNumber = policyNumber),

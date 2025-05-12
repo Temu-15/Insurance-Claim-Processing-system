@@ -9,10 +9,10 @@ export class CreateClaimDto {
     public readonly amountRequested: number,
     public readonly lossDate: Date,
     public readonly lossTime: Date,
-    public readonly user: object,
     public status?: ApplicationStatus,
     public claimDocument?: ClaimDocument,
-    public claimNumber?: string
+    public claimNumber?: string,
+    public userId?: number
   ) {}
 
   // @IsNotEmpty()
@@ -36,15 +36,14 @@ export class CreateClaimDto {
   // lossDate: Date;
 
   static fromRequestBody(req: any): CreateClaimDto {
-    console.log("req", req);
     return new CreateClaimDto(
       req.policyId,
       req.treatmentDetails,
       req.amountRequested,
       req.lossDate,
       req.lossTime,
-      req.user.id,
-      ApplicationStatus.PENDING
+      ApplicationStatus.PENDING,
+      req.userId
     );
   }
 }

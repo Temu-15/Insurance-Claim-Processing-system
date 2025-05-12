@@ -1,11 +1,15 @@
-import { Product } from "../entities/Product";
 import { AppDataSource } from "../config/data-source";
-import { CreateProductDto } from "../common/dtos/create-product.dto";
 import { Policy } from "../entities/Policy";
 import { CreatePolicyDto } from "../common/dtos/create-policy.dto";
 import { ApplicationStatus } from "../common/enums/application-status.enum";
 
 export class PolicyRepository {
+  static async findUserPolicies(userId: number): Promise<Policy[]> {
+    const res = await AppDataSource.getRepository(Policy).find();
+    console.log("Fetching user policies. this is repo", res);
+    return res;
+  }
+
   static async findAll(): Promise<Policy[]> {
     return AppDataSource.getRepository(Policy).find();
   }
@@ -19,12 +23,17 @@ export class PolicyRepository {
   static async findByPolicyNumber(
     policyNumber: string
   ): Promise<Policy | null> {
-    console.log(await AppDataSource.getRepository(Policy).findOne({
-      where: { policyNumber },
-    }));
     return AppDataSource.getRepository(Policy).findOne({
       where: { policyNumber },
     });
+  }
+
+  async findUserPolicies(userId: number): Promise<Policy[]> {
+    const res = await AppDataSource.getRepository(Policy).find({
+      where: { userId },
+    });
+    console.log("User Policies from repo:", res);
+    return res;
   }
 
   static async createPolicy(policyDto: CreatePolicyDto) {
@@ -45,4 +54,3 @@ export class PolicyRepository {
     return await repo.delete(policyId);
   }
 }
-

@@ -4,6 +4,15 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { env } from "../utils/env";
 
+export const me = (req: Request, res: Response) => {
+  if (!req.user) {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+  // Exclude sensitive fields
+  const { hashedPassword, ...userWithoutPassword } = req.user;
+  res.status(200).json(userWithoutPassword);
+};
+
 export const getAllUsers = async (req: Request, res: Response) => {
   try {
     const users = await UserService.getAllUsers();
@@ -26,7 +35,6 @@ export async function createUser(req: Request, res: Response) {
 }
 
 export const registerUser = async (req: Request, res: Response) => {
-  console.log("req.body in controller before try catch", req.body);
   try {
     const {
       firstName,
@@ -71,12 +79,6 @@ export const registerUser = async (req: Request, res: Response) => {
       hashedPassword,
     });
 
-    // Remove password from response
-    // const userResponse: Partial<Document> = newUser.toObject();
-    // delete userResponse.password;
-
-    console.log("newUser in registerUser controller", newUser);
-
     res.status(201).json(newUser);
   } catch (error: any) {
     console.error("Error registering user:", error);
@@ -102,7 +104,6 @@ export const deleteUser = async (req: Request, res: Response) => {
 export const loginUser = async (req: Request, res: Response) => {
   try {
     const { email, password, remember } = req.body;
-    console.log("req.body in controller before try catch", req.body);
     // Find the user by email
     const user = await UserService.findUserByEmail(email);
 

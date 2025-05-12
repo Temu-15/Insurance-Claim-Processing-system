@@ -1,5 +1,14 @@
-import { Entity, PrimaryGeneratedColumn, Column, Unique } from "typeorm";
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  Unique,
+  JoinColumn,
+  ManyToOne,
+} from "typeorm";
 import { ApplicationStatus } from "../common/enums/application-status.enum";
+import { Product } from "./Product";
+import { User } from "./User";
 
 @Entity("policies")
 @Unique(["policyNumber"]) // Ensures policy numbers are unique
@@ -7,7 +16,12 @@ export class Policy {
   @PrimaryGeneratedColumn()
   readonly policyId!: number;
 
-  @Column({ name: "productId" })
+  @ManyToOne(() => User)
+  @JoinColumn({ name: "userId" })
+  userId!: number;
+
+  @ManyToOne(() => Product)
+  @JoinColumn({ name: "productId" })
   readonly productId!: number;
 
   @Column({

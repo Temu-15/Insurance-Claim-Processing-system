@@ -2,13 +2,28 @@ import { Request, Response } from "express";
 import { ClaimService } from "../services/claim.service";
 import { CreateClaimDto } from "../common/dtos/create-claim.dto";
 
+// Typescript: Extend Express Request type to include user
+import { Request as ExpressRequest } from "express";
+declare module "express-serve-static-core" {
+  interface Request {
+    user?: any;
+  }
+}
+
 // Create a new claim
 export async function createClaim(
   req: Request,
   res: Response
 ): Promise<Response> {
   try {
+    const userId = (req.user as any)?.userId;
+    if (!userId) {
+      return res
+        .status(401)
+        .json({ message: "Unauthorized: userId not found" });
+    }
     const claimData = CreateClaimDto.fromRequestBody(req.body);
+    claimData.userId = userId;
     const newClaim = await ClaimService.createClaim(claimData);
     return res.status(201).json(newClaim);
   } catch (error) {
@@ -62,6 +77,27 @@ export async function getAllClaims(
   } catch (error) {
     console.error("Error fetching claims:", error);
     return res.status(500).json({ message: "Failed to fetch claims" });
+  }
+}
+
+// Get claims for the currently logged in user
+export async function getClaimsByUserId(
+  req: Request,
+  res: Response
+): Promise<Response> {
+  try {
+    // Assumes verifyToken middleware sets req.user
+    const userId = (req.user as any)?.userId;
+    if (!userId) {
+      return res
+        .status(401)
+        .json({ message: "Unauthorized: userId not found" });
+    }
+    const claims = await ClaimService.getUserClaims(userId);
+    return res.status(200).json(claims);
+  } catch (error) {
+    console.error("Error fetching user's claims:", error);
+    return res.status(500).json({ message: "Failed to fetch user's claims" });
   }
 }
 

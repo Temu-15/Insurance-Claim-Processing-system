@@ -34,7 +34,6 @@ const PrivateRoute = () => {
 const AdminRoute = () => {
   const { user } = useAuth();
   const location = useLocation();
-  console.log("User:", user);
 
   if (!user?.isAdmin) {
     return <Navigate to="/" state={{ from: location }} replace />;

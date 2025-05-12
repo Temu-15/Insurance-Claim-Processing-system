@@ -57,7 +57,6 @@ const UserDashboard: React.FC = () => {
           getAllClaims(),
         ]);
         const policiesData = policiesRes.data || [];
-        console.log();
         const claimsData = claimsRes.data || [];
 
         // Compute stats

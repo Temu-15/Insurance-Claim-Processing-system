@@ -35,3 +35,9 @@ export const getPolicyByPolicyNumber = async (policyNumber: string) => {
   );
   return response;
 };
+
+export const getUserPolicies = async () => {
+  const response = await axios.get(`${API_BASE_URL}/api/policies/my`);
+  console.log("User Policies from service:", response.data);
+  return response;
+};

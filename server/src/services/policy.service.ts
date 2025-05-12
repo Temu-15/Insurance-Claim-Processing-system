@@ -1,5 +1,4 @@
 import { CreatePolicyDto } from "../common/dtos/create-policy.dto";
-import { Policy } from "../entities/Policy";
 import { PolicyRepository } from "../repositories/policy.repository";
 
 class PolicyService {
@@ -25,6 +24,14 @@ class PolicyService {
     return PolicyRepository.createPolicy(policyDto);
   }
 
+  static async getUserPolicies(userId: number) {
+    const response = await PolicyRepository.findUserPolicies(userId);
+    if (!response) {
+      throw new Error("No policies found for this user");
+    }
+    return response;
+  }
+
   static async getPolicyById(id: number) {
     return PolicyRepository.findById(id);
   }
@@ -45,6 +52,5 @@ class PolicyService {
     return PolicyRepository.deletePolicy(id);
   }
 }
-
 
 export default PolicyService;

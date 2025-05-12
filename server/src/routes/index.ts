@@ -4,6 +4,7 @@ import { productRouter } from "./product.routes";
 import { policyRouter } from "./policy.router";
 import claimRouter from "./claim.routes";
 import authRouter from "./auth.routes";
+import analyticsRouter from "./analytics.routes";
 
 export function registerRoutes(app: Express) {
   app.use("/api/users", userRouter);
@@ -11,4 +12,5 @@ export function registerRoutes(app: Express) {
   app.use("/api/policies", policyRouter);
   app.use("/api/claims", claimRouter);
   app.use("/api/auth", authRouter);
+  app.use("/api/analytics", analyticsRouter);
 }

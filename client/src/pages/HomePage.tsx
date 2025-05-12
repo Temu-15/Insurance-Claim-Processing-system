@@ -4,14 +4,18 @@ import Footer from "../components/layout/Footer";
 import Hero from "../components/layout/Hero";
 import Navbar from "../components/layout/Navbar";
 import Pricing from "../components/layout/Pricing";
-import React, { useEffect } from "react";
+import { useEffect } from "react";
+import { me } from "../services/userService";
 
 const HomePage = () => {
   useEffect(() => {
-    
-      console.log(localStorage.getItem("AccessToken"));
-   
-  });
+    // fetch me
+    const fetchMe = async () => {
+      await me();
+    };
+    fetchMe();
+  }, []);
+
   return (
     <div className="">
       <Navbar />

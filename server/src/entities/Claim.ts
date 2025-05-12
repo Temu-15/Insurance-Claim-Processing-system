@@ -43,6 +43,9 @@ export class Claim {
     default: () => "CURRENT_TIMESTAMP",
   })
   lossTime!: Date;
+  
+    @Column({name: "userId"})
+    userId!: number;
 
   @CreateDateColumn()
   readonly createdAt!: Date;

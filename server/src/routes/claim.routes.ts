@@ -6,19 +6,19 @@ import {
   approveClaim,
   rejectClaim,
   deleteClaim,
+  getClaimsByUserId,
 } from "../controllers/claim.controller";
+import { verifyToken } from "../middleware/auth.middleware";
 
 const claimRouter = Router();
-claimRouter.post("/", createClaim);
+claimRouter.post("/", verifyToken, createClaim);
 
 claimRouter.get("/", getAllClaims);
+claimRouter.get("/my", verifyToken, getClaimsByUserId);
 
 claimRouter.get("/:id", getClaimById);
 claimRouter.put("/:id/approve", approveClaim);
 claimRouter.put("/:id/reject", rejectClaim);
-
-
-
 
 // claimRouter.put("/:id", updateClaim);
 

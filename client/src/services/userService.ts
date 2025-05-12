@@ -2,6 +2,10 @@ import axios from "axios";
 
 const API_BASE_URL = import.meta.env.VITE_APP_API_BASE_URL;
 
+export const me = async () => {
+  return axios.get(`${API_BASE_URL}/api/users/me`);
+};
+
 export const getAllUsers = async () => {
   return axios.get(`${API_BASE_URL}/api/users/usersall`);
 };
