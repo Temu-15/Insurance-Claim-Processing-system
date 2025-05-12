@@ -1,5 +1,4 @@
 import axios from "axios";
-import type { Policy } from "../pages/PoliciesPage";
 
 const API_BASE_URL = "http://localhost:3000";
 
@@ -34,5 +33,11 @@ export const getPolicyByPolicyNumber = async (policyNumber: string) => {
   const response = await axios.get(
     `${API_BASE_URL}/api/policies/policyNumber/${policyNumber}`
   );
+  return response;
+};
+
+export const getUserPolicies = async () => {
+  const response = await axios.get(`${API_BASE_URL}/api/policies/my`);
+  console.log("User Policies from service:", response.data);
   return response;
 };

@@ -28,7 +28,6 @@ export class ClaimRepository extends Repository<Claim> {
 
   // Create a new claim
   static async createClaim(claim: CreateClaimDto): Promise<Claim> {
-    console.log("claim", claim);
     return AppDataSource.getRepository(Claim).save(claim);
   }
 
@@ -42,6 +41,13 @@ export class ClaimRepository extends Repository<Claim> {
   // Find all claims
   static async findAll(): Promise<Claim[]> {
     return AppDataSource.getRepository(Claim).find();
+  }
+
+  // Find claims by user ID
+  static async findUserClaims(userId: any): Promise<Claim[]> {
+    return AppDataSource.getRepository(Claim).find({
+      where: { userId },
+    });
   }
 
   // Delete a claim by ID

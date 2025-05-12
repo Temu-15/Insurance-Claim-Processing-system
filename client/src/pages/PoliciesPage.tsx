@@ -2,9 +2,9 @@ import Sidebar from "../components/layout/Sidebar";
 import Button from "../components/ui/Button";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getAllPolicies } from "../services/policyService";
+import { getUserPolicies } from "../services/policyService";
 
-import { ApplicationStatus } from '../enums/ApplicationStatus.enum';
+import { ApplicationStatus } from "../enums/ApplicationStatus.enum";
 
 const columns = [
   "Policy Number",
@@ -52,20 +52,22 @@ const PoliciesPage = () => {
   };
   const statusFilter = getStatusFromQuery();
 
+  const statusOptions = [
+    "All",
+    "Active",
+    "Pending",
+    "Approved",
+    "Rejected",
+    "Expired",
+  ];
+
   useEffect(() => {
     const fetchPolicies = async () => {
       try {
-        const response = await getAllPolicies();
+        const response = await getUserPolicies();
         const policiesData = response.data;
-        const mappedPolicies = policiesData.map((policy: any) => ({
-          policyId: policy.policyId,
-          policyNumber: policy.policyNumber,
-          productId: policy.productId,
-          status: policy.status,
-          startDate: policy.startDate,
-          endDate: policy.endDate,
-        }));
-        setPolicies(mappedPolicies);
+        console.log("Policies Data:", policiesData);
+        setPolicies(policiesData);
       } catch (error) {
         console.error("Error fetching policies:", error);
       }
@@ -86,6 +88,52 @@ const PoliciesPage = () => {
             text="Create a New Policy"
           />
         </div>
+        <div className="flex flex-wrap gap-3 items-center mb-6 mt-10">
+          <span className="font-semibold text-gray-700 mr-2 text-sm">
+            Filter by status:
+          </span>
+          {statusOptions.map((status) => {
+            const isActive =
+              (statusFilter === null && status === "All") ||
+              (statusFilter && status.toLowerCase() === statusFilter);
+            const colorMap: Record<string, string> = {
+              All: "bg-gray-100 text-gray-700",
+              Active: "bg-green-100 text-green-800",
+              Approved: "bg-green-100 text-green-800",
+              Pending: "bg-yellow-100 text-yellow-800",
+              Rejected: "bg-red-100 text-red-800",
+              Expired: "bg-gray-300 text-gray-600",
+            };
+            return (
+              <button
+                key={status}
+                className={`px-4 py-1.5 rounded-full shadow-sm text-xs font-bold transition-all border border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-400 hover:scale-105 duration-150 ${
+                  colorMap[status] || "bg-gray-100 text-gray-700"
+                } ${
+                  isActive
+                    ? "ring-2 ring-blue-500 scale-105"
+                    : "opacity-80 hover:opacity-100"
+                }`}
+                style={{
+                  boxShadow: isActive
+                    ? "0 2px 8px 0 rgba(30, 64, 175, 0.08)"
+                    : undefined,
+                }}
+                onClick={() => {
+                  if (status === "All") {
+                    navigate(location.pathname);
+                  } else {
+                    navigate(
+                      `${location.pathname}?status=${status.toLowerCase()}`
+                    );
+                  }
+                }}
+              >
+                {status}
+              </button>
+            );
+          })}
+        </div>
         <div className="overflow-x-auto mt-8">
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
@@ -102,51 +150,64 @@ const PoliciesPage = () => {
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
               {policies
-                .filter(policy => !statusFilter || policy.status?.toLowerCase() === statusFilter)
+                .filter(
+                  (policy) =>
+                    !statusFilter ||
+                    (statusFilter === "active" &&
+                      policy.status?.toLowerCase() === "active") ||
+                    (statusFilter !== "active" &&
+                      policy.status?.toLowerCase() === statusFilter)
+                )
                 .map((policy, idx) => (
-                <tr key={idx}>
-                  {columns.map((col, colIdx) => {
-                    if (col === "Status") {
+                  <tr key={idx}>
+                    {columns.map((col, colIdx) => {
+                      if (col === "Status") {
+                        return (
+                          <td
+                            key={colIdx}
+                            className="px-6 py-4 whitespace-nowrap"
+                          >
+                            <span
+                              className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(
+                                policy.status
+                              )}`}
+                            >
+                              {policy.status}
+                            </span>
+                          </td>
+                        );
+                      }
+                      const fieldMap: Record<string, string> = {
+                        "Policy Number": "policyNumber",
+                        "Product Id": "productId",
+                        "Start Date": "startDate",
+                        "End Date": "endDate",
+                      };
+                      const field =
+                        fieldMap[col] || col.toLowerCase().replace(/ /g, "_");
+                      let value = policy[field as keyof Policy];
+                      // Format dates for display
+                      if (
+                        (field === "startDate" || field === "endDate") &&
+                        value
+                      ) {
+                        value = new Date(value).toLocaleDateString();
+                      }
+                      // Ensure value is not a Date object before rendering
+                      if (value instanceof Date) {
+                        value = value.toLocaleDateString();
+                      }
                       return (
                         <td
                           key={colIdx}
-                          className="px-6 py-4 whitespace-nowrap"
+                          className="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
                         >
-                          <span
-                            className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(
-                              policy.status
-                            )}`}
-                          >
-                            {policy.status}
-                          </span>
+                          {value}
                         </td>
                       );
-                    }
-                    const fieldMap: Record<string, string> = {
-                      "Policy Number": "policyNumber",
-                      "Product Id": "productId",
-                      "Start Date": "startDate",
-                      "End Date": "endDate",
-                    };
-                    const field =
-                      fieldMap[col] || col.toLowerCase().replace(/ /g, "_");
-                    let value = policy[field as keyof Policy];
-                    // Format dates for display
-                    if ((field === "startDate" || field === "endDate") && value) {
-                      value = new Date(value).toLocaleDateString();
-                    }
-                    return (
-                      <td
-                        key={colIdx}
-                        className="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
-                      >
-                        {value}
-                      </td>
-                    );
-                  })}
-
-                </tr>
-              ))}
+                    })}
+                  </tr>
+                ))}
             </tbody>
           </table>
         </div>

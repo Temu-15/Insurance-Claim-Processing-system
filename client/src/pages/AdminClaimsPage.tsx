@@ -13,6 +13,7 @@ import { getAllPolicies } from "../services/policyService";
 
 const AdminClaimsPage: React.FC = () => {
   const [claims, setClaims] = React.useState<any[]>([]);
+  const [statusFilter, setStatusFilter] = React.useState<string>("");
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
   const [approvingId, setApprovingId] = React.useState<number | null>(null);
@@ -46,7 +47,39 @@ const AdminClaimsPage: React.FC = () => {
       <AdminSidebar />
       <main className="flex-1 p-8 bg-gray-50 ml-64">
         <h1 className="text-2xl font-bold mb-6 text-gray-800">Manage Claims</h1>
-        <div className="overflow-x-auto">
+        <div className="flex flex-wrap gap-3 items-center mb-6 mt-2">
+  <span className="font-semibold text-gray-700 mr-2 text-sm">Filter by status:</span>
+  {["All", "Approved", "Pending", "Rejected"].map((status) => {
+    const isActive = (statusFilter === "" && status === "All") || (statusFilter && status.toLowerCase() === statusFilter.toLowerCase());
+    const colorMap: Record<string, string> = {
+      All: "bg-gray-100 text-gray-700",
+      Approved: "bg-green-100 text-green-800",
+      Pending: "bg-yellow-100 text-yellow-800",
+      Rejected: "bg-red-100 text-red-800",
+    };
+    return (
+      <button
+        key={status}
+        className={`px-4 py-1.5 rounded-full shadow-sm text-xs font-bold transition-all border border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-400 hover:scale-105 duration-150 ${colorMap[status]} ${
+          isActive ? "ring-2 ring-blue-500 scale-105" : "opacity-80 hover:opacity-100"
+        }`}
+        style={{
+          boxShadow: isActive ? "0 2px 8px 0 rgba(30, 64, 175, 0.08)" : undefined,
+        }}
+        onClick={() => {
+          if (status === "All") {
+            setStatusFilter("");
+          } else {
+            setStatusFilter(status.toLowerCase());
+          }
+        }}
+      >
+        {status}
+      </button>
+    );
+  })}
+</div>
+          <div className="overflow-x-auto">
           {loading && <div className="text-center py-4">Loading claims...</div>}
           {error && (
             <div className="text-center py-4 text-red-600">{error}</div>
@@ -78,7 +111,14 @@ const AdminClaimsPage: React.FC = () => {
               className="bg-white divide-y divide-gray-200"
               style={{ borderBottom: "none" }}
             >
-              {claims.map((claim) => (
+              {claims
+                .filter(claim =>
+                  !statusFilter ||
+                  (statusFilter === "submitted"
+                    ? claim.status?.toLowerCase() === "submitted"
+                    : claim.status?.toLowerCase() === statusFilter.toLowerCase())
+                )
+                .map((claim) => (
                 <tr
                   key={claim.claimId}
                   className="hover:bg-gray-100 transition-colors"
@@ -110,7 +150,7 @@ const AdminClaimsPage: React.FC = () => {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700 flex gap-2 justify-center">
                     <button
-                      className={`bg-green-700 opacity-80 hover:opacity-100 hover:bg-green-800 text-white text-xs font-semibold py-1 px-3 rounded transition-all duration-150 ${
+                      className={`bg-green-100 text-green-800 border border-green-300 hover:bg-green-200 hover:text-green-900 text-xs font-semibold py-1 px-3 rounded transition-all duration-150 ${
                         claim.status === "Approved"
                           ? "opacity-40 cursor-not-allowed"
                           : ""
@@ -141,7 +181,7 @@ const AdminClaimsPage: React.FC = () => {
                         : "Approve"}
                     </button>
                     <button
-                      className={`bg-red-700 opacity-80 hover:opacity-100 hover:bg-red-800 text-white text-xs font-semibold py-1 px-3 rounded transition-all duration-150 ${
+                      className={`bg-yellow-100 text-yellow-800 border border-yellow-300 hover:bg-yellow-200 hover:text-yellow-900 text-xs font-semibold py-1 px-3 rounded transition-all duration-150 ${
                         claim.status === "Rejected"
                           ? "opacity-40 cursor-not-allowed"
                           : ""

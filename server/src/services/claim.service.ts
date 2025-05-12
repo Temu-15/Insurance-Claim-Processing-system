@@ -5,6 +5,9 @@ import { ClaimRepository } from "../repositories/claim.repository";
 import { AppDataSource } from "../config/data-source";
 
 export class ClaimService {
+  static async getUserClaims(userId: number) {
+    return ClaimRepository.findUserClaims(userId);
+  }
   static async getAllClaims() {
     return ClaimRepository.findAll();
   }
@@ -22,12 +25,12 @@ export class ClaimService {
       .padStart(4, "0")}`;
     return ClaimRepository.createClaim(claim);
   }
-  
+
   static async updateClaimStatus(claimId: number, status: string) {
     const claim = await ClaimRepository.findById(claimId);
     if (!claim) return null;
     claim.status = status;
-    return await AppDataSource.getRepository('Claim').save(claim);
+    return await AppDataSource.getRepository("Claim").save(claim);
   }
 
   static async getClaimById(claimId: number) {

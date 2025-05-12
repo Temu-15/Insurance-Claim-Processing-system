@@ -1,7 +1,7 @@
 import Sidebar from "../components/layout/Sidebar";
 import Button from "../components/ui/Button";
 import { useEffect, useState } from "react";
-import { getAllClaims } from "../services/claimService";
+import { getMyClaims } from "../services/claimService";
 import { useNavigate, useLocation } from "react-router-dom";
 
 const columns = [
@@ -39,7 +39,6 @@ export interface Claim {
   lossDate: string;
   lossTime: string;
   createdAt: string;
-  user: object;
   updatedAt: string;
 }
 
@@ -58,7 +57,7 @@ const ClaimsPage = () => {
   useEffect(() => {
     const fetchClaims = async () => {
       try {
-        const response = await getAllClaims();
+        const response = await getMyClaims();
         const claimsData = response.data;
         // If the backend fields are different, map them here
         const mappedClaims = claimsData.map((claim: any) => ({
@@ -120,7 +119,55 @@ const ClaimsPage = () => {
             text="Create a New Claim"
           />
         </div>
-        <div className="overflow-x-auto mt-8">
+        {/* Status Filter UI */}
+        <div className="flex flex-wrap gap-3 items-center mb-6 mt-8">
+          <span className="font-semibold text-gray-700 mr-2 text-sm">
+            Filter by status:
+          </span>
+          {["All", "Approved", "Pending", "Submitted", "Rejected"].map(
+            (status) => {
+              const isActive =
+                (statusFilter === null && status === "All") ||
+                (statusFilter && status.toLowerCase() === statusFilter);
+              const colorMap: Record<string, string> = {
+                All: "bg-gray-100 text-gray-700",
+                Approved: "bg-green-100 text-green-800",
+                Pending: "bg-yellow-100 text-yellow-800",
+                Submitted: "bg-blue-100 text-blue-800",
+                Rejected: "bg-red-100 text-red-800",
+              };
+              return (
+                <button
+                  key={status}
+                  className={`px-4 py-1.5 rounded-full shadow-sm text-xs font-bold transition-all border border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-400 hover:scale-105 duration-150 ${
+                    colorMap[status]
+                  } ${
+                    isActive
+                      ? "ring-2 ring-blue-500 scale-105"
+                      : "opacity-80 hover:opacity-100"
+                  }`}
+                  style={{
+                    boxShadow: isActive
+                      ? "0 2px 8px 0 rgba(30, 64, 175, 0.08)"
+                      : undefined,
+                  }}
+                  onClick={() => {
+                    if (status === "All") {
+                      navigate(location.pathname);
+                    } else {
+                      navigate(
+                        `${location.pathname}?status=${status.toLowerCase()}`
+                      );
+                    }
+                  }}
+                >
+                  {status}
+                </button>
+              );
+            }
+          )}
+        </div>
+        <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
               <tr>
@@ -136,14 +183,16 @@ const ClaimsPage = () => {
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
               {claims
-                .filter(
-                  (claim: Claim) =>
-                    !statusFilter ||
-                    claim.status?.toLowerCase() === statusFilter
-                )
-                .map((claim: Claim, idx: number) => (
-                  <tr key={idx}>
-                    {columns.map((col: string, colIdx: number) => {
+                .filter((claim) => {
+                  if (!statusFilter || statusFilter === "all") return true;
+                  return claim.status.toLowerCase() === statusFilter;
+                })
+                .map((claim, rowIdx) => (
+                  <tr
+                    key={claim.claimId}
+                    className="hover:bg-gray-50 transition-colors"
+                  >
+                    {columns.map((col, colIdx) => {
                       // Add a button at the end for 'See Detail'
                       if (col === "") {
                         return (

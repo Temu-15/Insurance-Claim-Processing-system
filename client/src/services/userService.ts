@@ -2,6 +2,10 @@ import axios from "axios";
 
 const API_BASE_URL = "http://localhost:3000";
 
+export const me = async () => {
+  return axios.get(`${API_BASE_URL}/api/users/me`);
+};
+
 export const getAllUsers = async () => {
   return axios.get(`${API_BASE_URL}/api/users/usersall`);
 };

@@ -18,9 +18,7 @@ export const verifyToken = async (
   next: NextFunction
 ) => {
   // Get token from Authorization header only
-  console.log("Verifying token...");
   const authHeader = req.headers.authorization;
-  console.log("Authorization header:", req.headers.authorization);
 
   if (!authHeader?.startsWith("Bearer ")) {
     return res.status(401).json({ message: "Authentication required" });

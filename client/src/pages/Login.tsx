@@ -76,7 +76,6 @@ const Login: React.FC = () => {
 
       const token = response.data.token as string;
       const isAdmin = !!response.data.isAdmin;
-      console.log(response.data);
 
       // 2) Tell AuthContext about the token (populates user)
       await login(token);
@@ -86,7 +85,6 @@ const Login: React.FC = () => {
       const fromPath = (location.state as LocationState)?.from?.pathname;
       const redirectPath = fromPath || fallback;
 
-      console.log("Redirecting to:", redirectPath);
       navigate(redirectPath, { replace: true });
     } catch (err: any) {
       let message = "An error occurred. Please try again.";

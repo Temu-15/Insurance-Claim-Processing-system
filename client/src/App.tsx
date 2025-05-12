@@ -22,7 +22,6 @@ import { AuthProvider, useAuth } from "./Context/AuthContext";
 const PrivateRoute = () => {
   const { user, loading } = useAuth();
   const location = useLocation();
-  console.log("User:", user);
 
   if (loading) return <div>Loading...</div>;
   return user ? (
@@ -35,7 +34,6 @@ const PrivateRoute = () => {
 const AdminRoute = () => {
   const { user } = useAuth();
   const location = useLocation();
-  console.log("User:", user);
 
   if (!user?.isAdmin) {
     return <Navigate to="/" state={{ from: location }} replace />;

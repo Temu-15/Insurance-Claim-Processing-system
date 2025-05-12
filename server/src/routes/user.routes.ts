@@ -7,7 +7,7 @@
 // userRouter.post("/", createUser);
 
 import express from "express";
-import { deleteUser } from "../controllers/user.controller";
+import { deleteUser, me } from "../controllers/user.controller";
 import {
   registerUser,
   loginUser,
@@ -21,5 +21,7 @@ userRouter.post("/register", registerUser);
 userRouter.post("/login", loginUser);
 userRouter.get("/usersall", getAllUsers);
 userRouter.delete("/:id", deleteUser);
+
+userRouter.get("/me", verifyToken, me);
 
 export default userRouter;

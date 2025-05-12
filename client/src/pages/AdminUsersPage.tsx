@@ -59,28 +59,28 @@ const AdminUsersPage: React.FC = () => {
       <main className="flex-1 p-8 bg-gray-50 ml-64">
         <h1 className="text-2xl font-bold mb-6 text-gray-800">Manage Users</h1>
         <div className="overflow-x-auto">
-          <table className="min-w-full bg-white rounded-lg shadow overflow-hidden">
-            <thead className="bg-[#1a2b3c] text-white">
+          <table className="min-w-full divide-y divide-gray-200 border-0" style={{ borderBottom: "none" }}>
+            <thead className="bg-gray-50">
               <tr>
-                <th className="py-3 px-6 text-left">Full Name</th>
-                <th className="py-3 px-6 text-left">Email</th>
-                <th className="py-3 px-6 text-left">Age</th>
-                <th className="py-3 px-6 text-left">Date of Birth</th>
-                <th className="py-3 px-6 text-left">Role</th>
-                <th className="py-3 px-6">Actions</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Full Name</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Age</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date of Birth</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Role</th>
+                <th className="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
               </tr>
             </thead>
             <tbody>
               {users.map((user) => (
-                <tr key={user.userId} className="border-b hover:bg-gray-100 transition-colors">
-                  <td className="py-3 px-6">{user.fullName}</td>
-                  <td className="py-3 px-6">{user.email}</td>
-                  <td className="py-3 px-6">{user.age}</td>
-                  <td className="py-3 px-6">{user.dob ? new Date(user.dob).toISOString().slice(0,10) : ''}</td>
-                  <td className="py-3 px-6">{user.isAdmin ? 'Admin' : 'User'}</td>
-                  <td className="py-3 px-6 flex gap-2 justify-center">
+                <tr key={user.userId} className="hover:bg-gray-100 transition-colors">
+                  <td className="px-6 py-4 whitespace-nowrap text-[#154654] font-medium">{user.fullName}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{user.email}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{user.age}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{user.dob ? new Date(user.dob).toISOString().slice(0,10) : ''}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{user.isAdmin ? 'Admin' : 'User'}</td>
+                  <td className="px-6 py-4 whitespace-nowrap flex gap-2 justify-center">
                     <button
-                      className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-xs"
+                      className="bg-red-100 text-red-800 border border-red-300 hover:bg-red-200 hover:text-red-900 text-xs font-semibold py-1 px-3 rounded transition-all duration-150"
                       onClick={() => handleDelete(user.userId)}
                     >
                       Delete
@@ -99,13 +99,7 @@ const AdminUsersPage: React.FC = () => {
               </div>
             </div>
           )}
-          {loading && (
-            <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex justify-center items-center">
-              <div className="bg-white rounded-lg shadow p-4">
-                <h2 className="text-lg font-bold mb-2">Loading...</h2>
-              </div>
-            </div>
-          )}
+
           {error && (
             <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex justify-center items-center">
               <div className="bg-white rounded-lg shadow p-4">
