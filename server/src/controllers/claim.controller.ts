@@ -17,6 +17,7 @@ export async function createClaim(
 ): Promise<Response> {
   try {
     const userId = (req.user as any)?.userId;
+    console.log(req.body)
     if (!userId) {
       return res
         .status(401)

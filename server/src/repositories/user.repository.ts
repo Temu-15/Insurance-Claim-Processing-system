@@ -47,6 +47,7 @@ export const userRepository = {
     return await AppDataSource.getRepository(User).find();
   },
   deleteUser: async (userId: number) => {
+    console.log(userId)
     return await AppDataSource.getRepository(User).delete(userId);
   },
   findUserById: async (userId: number): Promise<User | null> => {

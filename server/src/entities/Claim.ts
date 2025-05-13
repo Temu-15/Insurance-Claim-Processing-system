@@ -38,11 +38,10 @@ export class Claim {
     default: () => "CURRENT_TIMESTAMP",
   })
   lossDate!: Date;
-  @Column({
-    type: "timestamp",
-    default: () => "CURRENT_TIMESTAMP",
-  })
-  lossTime!: Date;
+  
+  @Column({ type: "varchar", length: 8,
+   }) 
+  lossTime!: string;
   
     @Column({name: "userId"})
     userId!: number;

@@ -163,16 +163,14 @@ const ClaimDetailPage = () => {
                   Loss Date:
                 </span>{" "}
                 <span className="text-gray-900">
-                  {new Date(claim.lossDate).toLocaleString()}
+                  {new Date(claim.lossDate).toISOString().slice(0, 10)}
                 </span>
               </div>
               <div className="mb-3 flex items-center">
                 <span className="w-40 text-gray-500 font-medium">
                   Loss Time:
                 </span>{" "}
-                <span className="text-gray-900">
-                  {new Date(claim.lossTime).toLocaleString()}
-                </span>
+                <span className="text-gray-900">{claim.lossTime}</span>
               </div>
             </div>
             <div>

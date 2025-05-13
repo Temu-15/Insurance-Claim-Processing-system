@@ -11,6 +11,7 @@ export const getAllUsers = async () => {
 };
 
 export const deleteUser = async (userId: number) => {
+  console.log(userId)
   return axios.delete(`${API_BASE_URL}/api/users/${userId}`);
 };
 

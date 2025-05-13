@@ -208,16 +208,17 @@ const ClaimsPage = () => {
                         fieldMap[col] || col.toLowerCase().replace(/ /g, "_");
                       let value = claim[field as keyof Claim];
                       // Format dates for readability
-                      if (
-                        [
-                          "lossDate",
-                          "lossTime",
-                          "createdAt",
-                          "updatedAt",
-                        ].includes(field) &&
-                        value
-                      ) {
+                      if (field === "lossDate" && value) {
+                        // Format as YYYY-MM-DD only
+                        const dateObj = new Date(value as string);
+                        value = dateObj.toISOString().slice(0, 10); // YYYY-MM-DD
+                      } else if (["createdAt", "updatedAt"].includes(field) && value) {
                         value = new Date(value as string).toLocaleString();
+                      }
+                      // Show lossTime as plain string (e.g., '14:30')
+                      if (field === "lossTime" && value) {
+                        // No formatting needed, just display the string
+                        value = value as string;
                       }
                       // Format amount
                       if (field === "amountRequested" && value !== undefined) {

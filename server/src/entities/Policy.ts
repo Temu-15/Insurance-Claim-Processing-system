@@ -16,9 +16,9 @@ export class Policy {
   @PrimaryGeneratedColumn()
   readonly policyId!: number;
 
-  @ManyToOne(() => User)
-  @JoinColumn({ name: "userId" })
-  userId!: number;
+  @ManyToOne(() => User, { onDelete: 'SET NULL' })
+@JoinColumn({ name: "userId" })
+user!: User | null;
 
   @ManyToOne(() => Product)
   @JoinColumn({ name: "productId" })

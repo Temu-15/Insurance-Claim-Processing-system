@@ -30,7 +30,7 @@ export class PolicyRepository {
 
   async findUserPolicies(userId: number): Promise<Policy[]> {
     const res = await AppDataSource.getRepository(Policy).find({
-      where: { userId },
+      where: { user: { userId } },
     });
     console.log("User Policies from repo:", res);
     return res;

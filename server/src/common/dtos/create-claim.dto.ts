@@ -8,7 +8,7 @@ export class CreateClaimDto {
     public readonly treatmentDetails: string,
     public readonly amountRequested: number,
     public readonly lossDate: Date,
-    public readonly lossTime: Date,
+    public readonly lossTime: string,
     public status?: ApplicationStatus,
     public claimDocument?: ClaimDocument,
     public claimNumber?: string,

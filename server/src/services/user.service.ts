@@ -13,6 +13,7 @@ export const UserService = {
     return await userRepository.getAllUsers();
   },
   deleteUser: async (userId: number) => {
+    console.log(userId)
     return await userRepository.deleteUser(userId);
   },
   findUserById: async (userId: number): Promise<User | null> => {

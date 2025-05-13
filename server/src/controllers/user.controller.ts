@@ -92,12 +92,18 @@ export const registerUser = async (req: Request, res: Response) => {
 export const deleteUser = async (req: Request, res: Response) => {
   try {
     const userId = parseInt(req.params.id, 10);
-    await UserService.deleteUser(userId);
+    
+    const result = await UserService.deleteUser(userId);
+    
+    if (!result || !result.affected) {
+      return res.status(404).json({ message: "User not found" });
+    }
     res.status(204).send();
   } catch (error: any) {
+    console.error(error)
     res
       .status(500)
-      .json({ message: "Failed to delete user", error: error.message });
+      .json({ message: "Failed to delete user", error: error });
   }
 };
 

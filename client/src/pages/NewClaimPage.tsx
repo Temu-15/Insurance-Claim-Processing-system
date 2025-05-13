@@ -81,15 +81,17 @@ export const NewClaimPage = () => {
     e.preventDefault();
     setLoading(true);
     setError("");
+    console.log(form.lossTime)
     try {
       await createClaim({
         policyId: policy?.policyId || "",
         amountRequested: form.amountRequested,
         lossDate: form.lossDate,
-        lossTime: form.lossTime,
+        lossTime: `${form.lossTime}:00`,
         treatmentDetails: form.treatmentDetails,
         // user: { id: user?.id, name: user?.firstName },
       });
+      
       navigate("/user/claims");
     } catch (err: any) {
       setError(err?.message || "Failed to create policy");

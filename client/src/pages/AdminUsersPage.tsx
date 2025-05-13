@@ -13,6 +13,8 @@ const AdminUsersPage: React.FC = () => {
     try {
       const response = await getAllUsers();
       setUsers(response.data);
+      console.log(users);
+      
     } catch (err: any) {
       setError("Failed to fetch users");
     }
@@ -20,6 +22,7 @@ const AdminUsersPage: React.FC = () => {
 
   useEffect(() => {
     fetchUsers();
+    
   }, []);
 
   const handleDelete = async (userId: number) => {
@@ -65,6 +68,7 @@ const AdminUsersPage: React.FC = () => {
             </thead>
             <tbody>
               {users.map((user) => (
+              
                 <tr key={user.userId} className="hover:bg-gray-100 transition-colors">
                   <td className="px-6 py-4 whitespace-nowrap text-[#154654] font-medium">{user.fullName}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{user.email}</td>
