@@ -12,12 +12,7 @@ import {
 } from "@heroicons/react/24/outline";
 import {
   User,
-  FileText,
-  CheckCircle,
-  XCircle,
-  ClipboardList,
-  ShieldCheck,
-  AlertTriangle,
+
   LogOut,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
@@ -37,8 +32,8 @@ const AdminPage: React.FC = () => {
   const [policies, setPolicies] = useState<any[]>([]);
   const [products, setProducts] = useState<any[]>([]);
 
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  // const [loading, setLoading] = useState(false);
+  // const [error, setError] = useState<string | null>(null);
   const adminCardData = [
     {
       title: "Total Users",
@@ -106,55 +101,26 @@ const AdminPage: React.FC = () => {
   ];
 
   const fetchUsers = async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      const response = await getAllUsers();
-      setUsers(response.data);
-      // console.log(response.data);
-    } catch (err: any) {
-      setError("Failed to fetch users");
-    }
-    setLoading(false);
+    const response = await getAllUsers();
+    setUsers(response.data);
+    // console.log(response.data);
   };
 
   const fetchClaims = async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      const response = await getAllClaims();
-      setClaims(response.data);
-
-      console.log(response.data);
-    } catch (err: any) {
-      setError("Failed to fetch users");
-    }
-    setLoading(false);
+    const response = await getAllClaims();
+    setClaims(response.data);
+    // console.log(response.data);
   };
   const fetchProducts = async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      const response = await getAllProducts();
-      setProducts(response.data);
-      // console.log(response.data);
-    } catch (err: any) {
-      setError("Failed to fetch users");
-    }
-    setLoading(false);
+    const response = await getAllProducts();
+    setProducts(response.data);
+    // console.log(response.data);
   };
 
   const fetchPolicies = async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      const response = await getAllPolicies();
-      setPolicies(response.data);
-      // console.log(response.data);
-    } catch (err: any) {
-      setError("Failed to fetch users");
-    }
-    setLoading(false);
+    const response = await getAllPolicies();
+    setPolicies(response.data);
+    // console.log(response.data);
   };
 
   const handleSignOut = () => {
@@ -196,7 +162,7 @@ const AdminPage: React.FC = () => {
                 <div className="font-semibold text-gray-800">
                   {user?.firstName}
                 </div>
-                <div className="text-xs text-gray-500">{user.email}</div>
+                <div className="text-xs text-gray-500">{user?.email}</div>
               </div>
             </button>
 

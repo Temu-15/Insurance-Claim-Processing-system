@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Sidebar from "../components/layout/Sidebar";
-import Button from "../components/ui/Button";
+
 import { getClaimById } from "../services/claimService";
 
 interface Claim {

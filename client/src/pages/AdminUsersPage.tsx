@@ -1,18 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { getAllUsers, deleteUser, deactivateUser } from "../services/userService";
+import { getAllUsers, deleteUser } from "../services/userService";
 import Swal from 'sweetalert2';
 import AdminSidebar from "../components/layout/AdminSidebar";
 
 
 const AdminUsersPage: React.FC = () => {
   const [users, setUsers] = useState<any[]>([]);
-  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [modalOpen, setModalOpen] = useState(false);
-  const [selectedUser, setSelectedUser] = useState<any | null>(null);
 
   const fetchUsers = async () => {
-    setLoading(true);
     setError(null);
     try {
       const response = await getAllUsers();
@@ -20,7 +16,6 @@ const AdminUsersPage: React.FC = () => {
     } catch (err: any) {
       setError("Failed to fetch users");
     }
-    setLoading(false);
   };
 
   useEffect(() => {
@@ -38,7 +33,6 @@ const AdminUsersPage: React.FC = () => {
       confirmButtonText: 'Yes, delete it!'
     });
     if (!result.isConfirmed) return;
-    setLoading(true);
     setError(null);
     try {
       await deleteUser(userId);
@@ -48,7 +42,6 @@ const AdminUsersPage: React.FC = () => {
       setError("Failed to delete user");
       await Swal.fire('Error', 'Failed to delete user', 'error');
     }
-    setLoading(false);
   };
 
 
@@ -90,15 +83,7 @@ const AdminUsersPage: React.FC = () => {
               ))}
             </tbody>
           </table>
-          {modalOpen && (
-            <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex justify-center items-center">
-              <div className="bg-white rounded-lg shadow p-4">
-                <h2 className="text-lg font-bold mb-2">Edit User</h2>
-                <p>Selected User: {selectedUser.fullName}</p>
-                {/* Add form to update user info */}
-              </div>
-            </div>
-          )}
+
 
           {error && (
             <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex justify-center items-center">

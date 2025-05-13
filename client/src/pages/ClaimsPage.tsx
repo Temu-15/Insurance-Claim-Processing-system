@@ -14,20 +14,7 @@ const columns = [
   "",
 ];
 
-const getStatusColor = (status: string) => {
-  switch (status.toLowerCase()) {
-    case "approved":
-      return "bg-green-100 text-green-800";
-    case "submitted":
-      return "bg-blue-100 text-blue-800";
-    case "pending":
-      return "bg-yellow-100 text-yellow-800";
-    case "rejected":
-      return "bg-red-100 text-red-800";
-    default:
-      return "bg-gray-100 text-gray-800";
-  }
-};
+
 
 export interface Claim {
   claimId: string;
@@ -187,13 +174,12 @@ const ClaimsPage = () => {
                   if (!statusFilter || statusFilter === "all") return true;
                   return claim.status.toLowerCase() === statusFilter;
                 })
-                .map((claim, rowIdx) => (
+                .map((claim) => (
                   <tr
                     key={claim.claimId}
                     className="hover:bg-gray-50 transition-colors"
                   >
                     {columns.map((col, colIdx) => {
-                      // Add a button at the end for 'See Detail'
                       if (col === "") {
                         return (
                           <td

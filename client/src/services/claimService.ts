@@ -6,8 +6,8 @@ interface Claim {
   policyId: string;
   treatmentDetails: string;
   amountRequested: number;
-  lossDate: Date;
-  lossTime: Date;
+  lossDate: string | Date;
+  lossTime: string | Date;
 }
 
 export const getAllClaims = async () => {

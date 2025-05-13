@@ -141,7 +141,7 @@ const UserDashboard: React.FC = () => {
                 <div className="font-semibold text-gray-800">
                   {user?.firstName}
                 </div>
-                <div className="text-xs text-gray-500">{user.email}</div>
+                <div className="text-xs text-gray-500">{user?.email}</div>
               </div>
             </button>
 
