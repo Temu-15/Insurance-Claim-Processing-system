@@ -85,8 +85,8 @@ export const NewClaimPage = () => {
       await createClaim({
         policyId: policy?.policyId || "",
         amountRequested: form.amountRequested,
-        lossDate: new Date(form.lossDate),
-        lossTime: new Date(`1970-01-01T${form.lossTime}:00Z`),
+        lossDate: form.lossDate,
+        lossTime: form.lossTime,
         treatmentDetails: form.treatmentDetails,
         // user: { id: user?.id, name: user?.firstName },
       });
@@ -234,15 +234,15 @@ export const NewClaimPage = () => {
                 </div>
                 <div className="mb-2">
                   <label className="block text-sm font-medium">
-                    {policy?.startDate}
+                    {typeof policy?.startDate === 'string' ? policy.startDate : ''}
                   </label>
-                  <div>2022-08-09</div>
+                  <div>{typeof policy?.startDate === 'string' ? policy.startDate : ''}</div>
                 </div>
                 <div className="mb-2">
                   <label className="block text-sm font-medium">
-                    {policy?.endDate}
+                    {typeof policy?.endDate === 'string' ? policy.endDate : ''}
                   </label>
-                  <div>2023-08-09</div>
+                  <div>{typeof policy?.endDate === 'string' ? policy.endDate : ''}</div>
                 </div>
               </div>
             </div>
@@ -295,7 +295,7 @@ export const NewClaimPage = () => {
                       name="lossDate"
                       placeholder=" "
                       className="peer block w-full rounded-lg border border-gray-300 px-10 pt-4 pb-1 text-gray-700 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition"
-                      value={form.lossDate}
+                      value={typeof form.lossDate === 'string' ? form.lossDate : ''}
                       onChange={handleChange}
                       required
                     />
@@ -329,7 +329,7 @@ export const NewClaimPage = () => {
                       name="lossTime"
                       placeholder=" "
                       className="peer block w-full rounded-lg border border-gray-300 px-10 pt-4 pb-1 text-gray-700 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition"
-                      value={form.lossTime}
+                      value={typeof form.lossTime === 'string' ? form.lossTime : ''}
                       onChange={handleChange}
                       required
                     />
@@ -385,7 +385,7 @@ export const NewClaimPage = () => {
                       placeholder=" "
                       className="peer block w-full rounded-lg border border-gray-300 px-4 pt-6 pb-2 text-gray-700 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition resize-none"
                       value={form.treatmentDetails}
-                      onChange={handleChange}
+                      onChange={e => setForm({ ...form, treatmentDetails: e.target.value })}
                       required
                     />
                     <label

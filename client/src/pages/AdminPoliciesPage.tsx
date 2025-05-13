@@ -9,7 +9,7 @@ import {
 } from "../services/policyService";
 import { getAllUsers } from "../services/userService";
 import Swal from "sweetalert2";
-import { getProductById } from "../services/productService";
+
 
 const AdminPoliciesPage: React.FC = () => {
   const [policies, setPolicies] = React.useState<any[]>([]);
